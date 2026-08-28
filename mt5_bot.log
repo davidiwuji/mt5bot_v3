@@ -1,0 +1,28 @@
+2026-08-28 09:01:25,452 [INFO] Connected. Account: 476765693, Balance: 1000.0, Server: Exness-MT5Trial9
+2026-08-28 09:01:25,601 [INFO] Bot started. Active strategy: 'session_range_breakout'.
+2026-08-28 09:01:25,781 [ERROR] Order failed: retcode=10027, comment=AutoTrading disabled by client
+2026-08-28 09:02:25,991 [ERROR] Order failed: retcode=10027, comment=AutoTrading disabled by client
+2026-08-28 09:03:03,653 [INFO] Connected. Account: 476765693, Balance: 1000.0, Server: Exness-MT5Trial9
+2026-08-28 09:03:03,662 [INFO] Bot started. Active strategy: 'session_range_breakout'.
+2026-08-28 09:03:03,809 [INFO] Trade placed: BUY 0.01 lots @ 4614.468, SL=4571.35, TP=4699.923999999998
+2026-08-28 09:09:56,697 [INFO] Connected. Account: 476765693, Balance: 1000.0, Server: Exness-MT5Trial9
+2026-08-28 09:09:57,328 [INFO] Bot started. Active strategy: 'session_range_breakout'.
+2026-08-28 13:00:43,385 [INFO] Connected. Account: 476765693, Balance: 1000.0, Server: Exness-MT5Trial9
+2026-08-28 13:00:43,427 [INFO] Bot started. Active strategy: 'scalperv2'.
+2026-08-28 13:08:43,901 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 13:09:43,983 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 13:10:43,997 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 13:11:44,013 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 13:12:44,069 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 13:13:44,141 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 13:14:44,327 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 13:15:55,949 [INFO] Connected. Account: 476765693, Balance: 1000.0, Server: Exness-MT5Trial9
+2026-08-28 13:15:55,966 [INFO] Bot started. Active strategy: 'scalperv2'.
+2026-08-28 13:32:58,543 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 13:33:45,020 [INFO] Connected. Account: 476765693, Balance: 1000.0, Server: Exness-MT5Trial9
+2026-08-28 13:33:45,035 [INFO] Bot started. Active strategy: 'scalperv2'.
+2026-08-28 16:22:42,324 [INFO] Connected. Account: 476765693, Balance: 955.05, Server: Exness-MT5Trial9
+2026-08-28 16:22:42,344 [INFO] Bot started. Active strategy: 'scalperv2'.
+2026-08-28 17:30:50,357 [INFO] Trade placed: BUY 0.01 lots @ 4483.374, SL=4448.631828571429, TP=4570.299448335742
+2026-08-28 21:17:03,105 [INFO] Connected. Account: 476765693, Balance: 918.47, Server: Exness-MT5Trial9
+2026-08-28 21:17:03,132 [INFO] Bot started. Active strategy: 'session_range_breakout'.
