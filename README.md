@@ -19,6 +19,7 @@ mt5bot_v3/
 │       ├── ma_crossover.py          ← simple example strategy
 │       ├── session_range_breakout.py ← your 12am-7:30am Lagos range breakout, closes by 6pm
 │       ├── ema_rsi_pullback.py      ← trend + RSI pullback strategy
+│       ├── gold_scalper.py          ← high-frequency mean-reversion scalp
 │       └── README.md               ← how to add your own strategy
 ```
 
@@ -71,6 +72,13 @@ Three ship with the bot — pick one in `config.py`'s `ACTIVE_STRATEGY`:
 - `ema_rsi_pullback` — trend (EMA200) + RSI pullback entries, no time
   restriction, fires less often but only on higher-quality setups.
 - `ma_crossover` — simple 20/50 MA crossover, kept as a minimal example.
+- `gold_scalper` — high-frequency mean-reversion scalp (Bollinger Bands +
+  RSI + ATR-based stop, spread and session filters). Trades often with a
+  small target, so most trades are small wins — but if price keeps
+  trending instead of snapping back, a loss can outsize a typical win.
+  Needs `TIMEFRAME` set to M1 or M5 and `CHECK_INTERVAL_SECONDS` lowered
+  (e.g. 15-20s) in `config.py` — see the notes at the top of that
+  strategy file before switching to it, and demo-trade it first.
 
 See `mt5bot/strategies/README.md` for how to write your own.
 

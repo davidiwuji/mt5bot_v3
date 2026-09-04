@@ -30,10 +30,19 @@ class Signal:
                 to config.SL_POINTS from the current entry price.
     tp        : explicit take-profit PRICE. If None, the bot falls
                 back to config.TP_POINTS from the current entry price.
+                Ignored if tp_usd is set.
+    tp_usd    : target profit in DOLLARS instead of a price. A strategy
+                can't compute a price-based TP for "$0.50 profit" itself
+                because lot size isn't decided until later (trader.py
+                sizes it from the SL distance and RISK_PERCENT) — so
+                this hands off a dollar amount instead, and the bot
+                converts it to a price once the lot is known. If set,
+                this takes priority over tp.
     """
     direction: str
     sl: Optional[float] = None
     tp: Optional[float] = None
+    tp_usd: Optional[float] = None
 
 
 def load_strategy(name: str):

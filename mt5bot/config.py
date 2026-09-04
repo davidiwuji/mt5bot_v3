@@ -15,7 +15,7 @@ import MetaTrader5 as mt5
 
 # Must match the EXACT symbol name shown in your MT5 Market Watch.
 # Some brokers use suffixes/prefixes, e.g. "XAUUSD.", "GOLD", "XAUUSDm".
-SYMBOL = "XAUUSDm"
+SYMBOL = "XAUUSD"
 
 # Candle timeframe used to build the data your strategy analyzes.
 # Common options: mt5.TIMEFRAME_M5, M15, M30, H1, H4, D1
@@ -32,6 +32,14 @@ TIMEFRAME = mt5.TIMEFRAME_M15
 #   "ma_crossover"            -> simple example strategy (20/50 MA cross)
 #   "session_range_breakout"  -> your 12am-7:30am Lagos high/low breakout
 #   "ema_rsi_pullback"        -> trend + RSI pullback, fewer/higher-quality entries
+#   "gold_scalper"            -> HF mean-reversion scalp (see notes in that file
+#                                 before using — needs TIMEFRAME/CHECK_INTERVAL
+#                                 tuned differently than the others)
+#   "hf_scalper"              -> like gold_scalper, but the target is a % of
+#                                 your current balance (e.g. ~$0.50 on $100)
+#                                 instead of a fixed band/RR target, so it
+#                                 grows automatically as the account grows.
+#                                 Pair with MAX_TRADES_PER_DAY = None below.
 #
 # See mt5bot/strategies/README.md for how to add your own.
 ACTIVE_STRATEGY = "session_range_breakout"
@@ -68,7 +76,11 @@ BREAK_EVEN_TRIGGER_RR = 1.0
 # TRADE FREQUENCY / BEHAVIOR
 # ------------------------------------------------------------------
 
-MAX_TRADES_PER_DAY = 3          # hard cap on new trades opened per day
+MAX_TRADES_PER_DAY = 3          # hard cap on new trades opened per day.
+                                 # Set to None for NO cap — it still only ever holds
+                                 # one position at a time, so "no cap" means it just
+                                 # takes the next setup as soon as the last trade
+                                 # closes, rather than stopping after N trades.
 
 # How often (seconds) the bot checks for a brand-new entry signal.
 CHECK_INTERVAL_SECONDS = 60

@@ -1,9 +1,9 @@
 """
-STRATEGY: session_range_breakout (fixed)
+STRATEGY: session_range_breakout (fixed, now NTP-accurate)
 
 Your strategy exactly as described:
   - RANGE: the high and low (wicks) of every candle between 00:00 and
-    07:30 Lagos time, each day.
+    08:00 Lagos time, each day — this is your Asian-session range.
   - BUY: the first candle that FULLY CLOSES above the range high.
     SL = the range low.
   - SELL: the first candle that FULLY CLOSES below the range low.
@@ -13,22 +13,32 @@ Your strategy exactly as described:
     read automatically by run.py). If you want a TP after all, see the
     note near REWARD_RISK_RATIO below.
 
-WHAT WAS WRONG BEFORE:
-  MT5's candle puller returns the CURRENTLY FORMING candle as the most
-  recent row (its "close" is really just whatever price is right now,
-  not a finished candle). The old version checked that still-forming
-  row, so it could fire mid-candle on a wick spike — not an actual
-  confirmed close, which is what you asked for. This version checks
-  the LAST FULLY CLOSED candle instead, and also only fires on the
-  FIRST candle that breaks the level (not every candle afterward that
-  happens to still be beyond it).
+WHAT WAS WRONG BEFORE (two separate issues, both fixed now):
+  1. MT5's candle puller returns the CURRENTLY FORMING candle as the
+     most recent row (its "close" is really just whatever price is
+     right now, not a finished candle). The old version checked that
+     still-forming row, so it could fire mid-candle on a wick spike —
+     not an actual confirmed close. Fixed by checking the LAST FULLY
+     CLOSED candle instead, and only on the FIRST candle that breaks
+     the level (not every candle afterward that's still beyond it).
+  2. now_lagos() was built from your PC's own system clock. If that
+     clock has drifted or isn't synced, every time check here —
+     "has the range finished forming yet", "is it still today" — shifts
+     along with it, which would explain firing at the wrong time even
+     with the confirmed-close fix in place. now_lagos() now corrects
+     against a real NTP time server instead (see mt5bot/timeutils.py).
 
-IMPORTANT — broker time calibration:
-  MT5 candle timestamps are in your BROKER's server time, not Lagos
-  time. Set config.BROKER_TO_LAGOS_OFFSET_HOURS so this strategy reads
-  the correct midnight-7:30am window — check your MT5 terminal's clock
-  against real Lagos time and adjust that setting (see the comment
-  above it in config.py).
+TWO SEPARATE CALIBRATIONS — BOTH MATTER, CHECK BOTH:
+  - Your PC's clock accuracy: now fixed automatically via NTP.
+  - Your BROKER's candle timestamps: still a manual setting
+    (config.BROKER_TO_LAGOS_OFFSET_HOURS) — accurate real time doesn't
+    help if this one is wrong, since the bot would be comparing
+    correct current time against incorrectly-labeled candles. Check
+    your MT5 terminal's clock against real Lagos time and set that
+    value accordingly (see the comment above it in config.py). Get
+    this wrong and the range window reads the wrong candles regardless
+    of how accurate now_lagos() itself is — worth double-checking given
+    how much this strategy depends on exact timing.
 """
 
 from datetime import time as dtime
@@ -40,7 +50,7 @@ from mt5bot.timeutils import to_lagos, now_lagos
 
 # --- strategy-specific settings (only affect this strategy) ---
 RANGE_START = dtime(0, 0)      # 00:00 Lagos
-RANGE_END = dtime(7, 30)       # 07:30 Lagos
+RANGE_END = dtime(8, 0)        # 08:00 Lagos — your Asian-session window
 
 # Read automatically by run.py: force-close all of THIS bot's open
 # trades at this Lagos hour, every day, no matter what.

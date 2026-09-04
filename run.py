@@ -29,7 +29,7 @@ from mt5bot.trader import (
     get_position_close_info,
 )
 from mt5bot.strategies import load_strategy
-from mt5bot.timeutils import now_lagos
+from mt5bot.timeutils import now_lagos, sync_now
 from mt5bot.dashboard import Dashboard
 
 # File logging keeps running in the background even though the
@@ -47,13 +47,23 @@ def run():
         print("Failed to connect to MT5. Check mt5_bot.log for details.")
         return
 
+    ntp_ok = sync_now()  # correct against real internet time before anything time-gated runs
+
     strategy_module = load_strategy(config.ACTIVE_STRATEGY)
-    generate_signal = strategy_module.generate_signal
+    manages_own_orders = getattr(strategy_module, "MANAGES_OWN_ORDERS", False)
+    generate_signal = None if manages_own_orders else strategy_module.generate_signal
     close_all_by_hour = getattr(strategy_module, "CLOSE_ALL_BY_LAGOS_HOUR", None)
 
     dash = Dashboard(strategy_name=config.ACTIVE_STRATEGY)
     dash.start()
     dash.log_event(f"Connected. Strategy '{config.ACTIVE_STRATEGY}' active.", style="bold green")
+    if ntp_ok:
+        dash.log_event(f"Time synced to real internet time. Lagos time now: {now_lagos():%H:%M:%S}", style="cyan")
+    else:
+        dash.log_event(
+            "NTP sync failed — using system clock until network is reachable. Check mt5_bot.log.",
+            style="bold red",
+        )
     log.info(f"Bot started. Active strategy: '{config.ACTIVE_STRATEGY}'.")
 
     last_signal_check = 0.0
@@ -105,28 +115,46 @@ def run():
             if now_ts - last_signal_check >= config.CHECK_INTERVAL_SECONDS:
                 last_signal_check = now_ts
 
-                if trades_opened_today() >= config.MAX_TRADES_PER_DAY:
-                    pass  # daily cap reached, stay quiet rather than spamming the feed
-                elif has_open_position():
-                    pass  # already in a trade from this bot, nothing new to check
-                else:
+                if manages_own_orders:
+                    # Strategy handles its own entries, exits, and daily
+                    # gating internally (e.g. a pending-order straddle) —
+                    # just hand it the latest data each tick.
                     df = get_data()
                     if not df.empty:
-                        signal = generate_signal(df)
-                        if signal.direction in ("buy", "sell"):
-                            dash.log_event(
-                                f"Signal: {signal.direction.upper()} "
-                                f"(SL={signal.sl}, TP={signal.tp})",
-                                style="bold magenta",
-                            )
-                            success = place_trade(signal.direction, sl=signal.sl, tp=signal.tp)
-                            if success:
-                                dash.log_event(
-                                    f"Trade opened: {signal.direction.upper()} {config.SYMBOL}",
-                                    style="bold green",
+                        strategy_module.on_tick(df)
+                else:
+                    daily_cap_reached = (
+                        config.MAX_TRADES_PER_DAY is not None
+                        and trades_opened_today() >= config.MAX_TRADES_PER_DAY
+                    )
+                    if daily_cap_reached:
+                        pass  # daily cap reached, stay quiet rather than spamming the feed
+                    elif has_open_position():
+                        pass  # already in a trade from this bot, nothing new to check
+                    else:
+                        df = get_data()
+                        if not df.empty:
+                            signal = generate_signal(df)
+                            if signal.direction in ("buy", "sell"):
+                                target_note = (
+                                    f"TP=${signal.tp_usd:.2f}" if signal.tp_usd is not None
+                                    else f"TP={signal.tp}"
                                 )
-                            else:
-                                dash.log_event("Trade failed to open — check mt5_bot.log", style="bold red")
+                                dash.log_event(
+                                    f"Signal: {signal.direction.upper()} "
+                                    f"(SL={signal.sl}, {target_note})",
+                                    style="bold magenta",
+                                )
+                                success = place_trade(
+                                    signal.direction, sl=signal.sl, tp=signal.tp, tp_usd=signal.tp_usd
+                                )
+                                if success:
+                                    dash.log_event(
+                                        f"Trade opened: {signal.direction.upper()} {config.SYMBOL}",
+                                        style="bold green",
+                                    )
+                                else:
+                                    dash.log_event("Trade failed to open — check mt5_bot.log", style="bold red")
 
             time.sleep(config.POSITION_CHECK_INTERVAL_SECONDS)
 

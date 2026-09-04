@@ -17,7 +17,7 @@ from .risk import calculate_lot_size
 log = logging.getLogger("mt5_bot")
 
 
-def place_trade(direction: str, sl: float = None, tp: float = None) -> bool:
+def place_trade(direction: str, sl: float = None, tp: float = None, tp_usd: float = None) -> bool:
     """
     Open a market order in the given direction ('buy' or 'sell') on
     the configured symbol.
@@ -26,6 +26,11 @@ def place_trade(direction: str, sl: float = None, tp: float = None) -> bool:
     calculate their own stop/target based on market structure (like
     session_range_breakout) pass them in directly. If left as None,
     the fallback SL_POINTS/TP_POINTS from config.py are used instead.
+
+    tp_usd is an optional target profit in DOLLARS instead of a price
+    (e.g. from Signal.tp_usd). If set, it overrides tp — the actual TP
+    price is computed AFTER the lot size is known, since a dollar
+    target needs the lot to convert into a price distance.
     """
     symbol_info = mt5.symbol_info(config.SYMBOL)
     tick = mt5.symbol_info_tick(config.SYMBOL)
@@ -54,6 +59,18 @@ def place_trade(direction: str, sl: float = None, tp: float = None) -> bool:
     sl_distance_points = abs(price - final_sl) / point if point else config.SL_POINTS
     lot = calculate_lot_size(sl_distance_points)
 
+    # Dollar-based target overrides the price-based one, now that lot is known.
+    if tp_usd is not None:
+        tick_value = symbol_info.trade_tick_value
+        tick_size = symbol_info.trade_tick_size
+        value_per_price_unit_per_lot = (tick_value / tick_size) if tick_size else 0
+
+        if value_per_price_unit_per_lot > 0 and lot > 0:
+            price_distance = tp_usd / (lot * value_per_price_unit_per_lot)
+            final_tp = price + price_distance if direction == "buy" else price - price_distance
+        else:
+            log.error("Could not compute dollar-based TP — falling back to price-based TP.")
+
     request = {
         "action": mt5.TRADE_ACTION_DEAL,
         "symbol": config.SYMBOL,
@@ -77,9 +94,10 @@ def place_trade(direction: str, sl: float = None, tp: float = None) -> bool:
         log.error(f"Order failed: retcode={code}, comment={comment}")
         return False
 
+    tp_note = f" (targeting ${tp_usd:.2f})" if tp_usd is not None else ""
     log.info(
         f"Trade placed: {direction.upper()} {lot} lots @ {price}, "
-        f"SL={final_sl}, TP={final_tp}"
+        f"SL={final_sl}, TP={final_tp}{tp_note}"
     )
     return True
 
@@ -258,3 +276,85 @@ def get_position_close_info(position_ticket: int):
         if d.position_id == position_ticket and d.entry == mt5.DEAL_ENTRY_OUT:
             return {"profit": d.profit, "price": d.price}
     return None
+
+
+# ============================================================
+# PENDING ORDERS — for strategies that straddle a breakout level
+# (buy-stop above, sell-stop below) instead of entering on a
+# confirmed candle close. Used by strategies with MANAGES_OWN_ORDERS
+# set (e.g. ny_session_breakout).
+# ============================================================
+
+def place_pending_order(direction: str, entry_price: float, sl: float, tp: float = None) -> bool:
+    """
+    Places a BUY STOP or SELL STOP — an order that sits unfilled until
+    price actually reaches entry_price, then fills automatically. This
+    is what lets a straddle trigger the instant price touches a level,
+    rather than waiting for a candle to close beyond it.
+    """
+    symbol_info = mt5.symbol_info(config.SYMBOL)
+    if symbol_info is None:
+        log.error("Could not get symbol info — aborting pending order.")
+        return False
+
+    point = symbol_info.point
+    if direction == "buy":
+        order_type = mt5.ORDER_TYPE_BUY_STOP
+    elif direction == "sell":
+        order_type = mt5.ORDER_TYPE_SELL_STOP
+    else:
+        log.error(f"Unknown order direction: {direction}")
+        return False
+
+    sl_distance_points = abs(entry_price - sl) / point if point else config.SL_POINTS
+    lot = calculate_lot_size(sl_distance_points)
+
+    request = {
+        "action": mt5.TRADE_ACTION_PENDING,
+        "symbol": config.SYMBOL,
+        "volume": lot,
+        "type": order_type,
+        "price": entry_price,
+        "sl": sl,
+        "tp": tp if tp is not None else 0.0,
+        "magic": config.MAGIC_NUMBER,
+        "comment": "python-bot-pending",
+        "type_time": mt5.ORDER_TIME_GTC,
+        "type_filling": mt5.ORDER_FILLING_IOC,
+    }
+
+    result = mt5.order_send(request)
+    if result is None or result.retcode != mt5.TRADE_RETCODE_DONE:
+        code = result.retcode if result else mt5.last_error()
+        log.error(f"Pending order failed: {code}")
+        return False
+
+    log.info(f"Pending {direction.upper()} STOP placed @ {entry_price}, SL={sl}, lot={lot}")
+    return True
+
+
+def get_pending_orders() -> list:
+    """This bot's currently unfilled pending orders (matched by magic number)."""
+    orders = mt5.orders_get(symbol=config.SYMBOL)
+    if not orders:
+        return []
+    return [o for o in orders if o.magic == config.MAGIC_NUMBER]
+
+
+def cancel_all_pending_orders(reason: str = "") -> int:
+    """
+    Cancels every one of this bot's unfilled pending orders — used for
+    the "other side" of a straddle once one side fills, and for
+    cleaning up if neither side filled within the trade window.
+    """
+    orders = get_pending_orders()
+    cancelled = 0
+    for order in orders:
+        result = mt5.order_send({"action": mt5.TRADE_ACTION_REMOVE, "order": order.ticket})
+        if result is not None and result.retcode == mt5.TRADE_RETCODE_DONE:
+            cancelled += 1
+            log.info(f"Cancelled pending order #{order.ticket} ({reason})")
+        else:
+            code = result.retcode if result else mt5.last_error()
+            log.error(f"Failed to cancel pending order #{order.ticket}: {code}")
+    return cancelled

@@ -26,3 +26,79 @@
 2026-08-28 17:30:50,357 [INFO] Trade placed: BUY 0.01 lots @ 4483.374, SL=4448.631828571429, TP=4570.299448335742
 2026-08-28 21:17:03,105 [INFO] Connected. Account: 476765693, Balance: 918.47, Server: Exness-MT5Trial9
 2026-08-28 21:17:03,132 [INFO] Bot started. Active strategy: 'session_range_breakout'.
+2026-08-28 22:33:38,025 [INFO] Connected. Account: 476765693, Balance: 18.47, Server: Exness-MT5Trial9
+2026-08-28 22:34:12,516 [INFO] Connected. Account: 476765693, Balance: 18.47, Server: Exness-MT5Trial9
+2026-08-28 22:34:12,534 [INFO] Bot started. Active strategy: 'hf_scalper'.
+2026-08-28 22:39:25,326 [INFO] Connected. Account: 476765693, Balance: 18.47, Server: Exness-MT5Trial9
+2026-08-28 22:39:25,327 [ERROR] Symbol 'XAUUSD' not found. Check the exact symbol name in your MT5 Market Watch (broker suffixes vary) and update SYMBOL in config.py.
+2026-08-28 22:43:00,431 [INFO] Connected. Account: 476765693, Balance: 18.47, Server: Exness-MT5Trial9
+2026-08-28 22:43:00,454 [INFO] Bot started. Active strategy: 'session_range_breakout'.
+2026-08-28 23:08:06,667 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:09:06,685 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:10:06,715 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:11:06,752 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:12:06,764 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:13:07,172 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:14:07,185 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:15:07,254 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:16:07,360 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:17:07,422 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:18:07,505 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:19:07,659 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:20:07,683 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:21:07,717 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:22:07,737 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:23:07,770 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:24:08,190 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:25:08,245 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:26:08,253 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:27:08,295 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:28:08,338 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:29:08,488 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:30:08,535 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:31:08,702 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:32:08,739 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:33:08,860 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:34:08,888 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:35:09,310 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:36:09,552 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:37:09,603 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:38:09,654 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:39:09,871 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:40:10,572 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:41:12,267 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:42:14,440 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:43:16,427 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:44:16,494 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:45:16,917 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:46:16,955 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:47:16,971 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:48:17,296 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:49:17,364 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:50:17,383 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:51:18,127 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:52:18,290 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:53:18,387 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:54:18,414 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:55:18,430 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:56:18,441 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:57:18,951 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:58:19,042 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-28 23:59:20,054 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-29 00:00:20,514 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-29 00:01:20,528 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-29 00:02:20,541 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-29 00:03:20,564 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-29 00:04:20,576 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-29 00:05:20,698 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-29 00:06:20,722 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-29 00:07:20,879 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-29 00:08:20,899 [ERROR] No data returned for XAUUSDm: (-10001, 'IPC send failed')
+2026-08-29 00:11:15,442 [INFO] Connected. Account: 476765693, Balance: 18.47, Server: Exness-MT5Trial9
+2026-08-29 00:11:15,461 [INFO] Bot started. Active strategy: 'session_range_breakout'.
+2026-08-29 00:12:55,789 [INFO] Connected. Account: 476765693, Balance: 18.47, Server: Exness-MT5Trial9
+2026-08-29 00:12:55,814 [INFO] Bot started. Active strategy: '2scalp'.
+2026-08-29 08:30:37,273 [INFO] Connected. Account: 476765693, Balance: 38.6, Server: Exness-MT5Trial9
+2026-08-29 08:30:37,297 [INFO] Bot started. Active strategy: '2scalp'.
+2026-08-29 08:41:12,303 [INFO] Connected. Account: 476765693, Balance: 38.6, Server: Exness-MT5Trial9
+2026-08-29 08:41:12,319 [INFO] Bot started. Active strategy: '2scalp'.
