@@ -108,7 +108,7 @@ MAGIC_NUMBER = 987654
 # set this to -2. If it reads 10:00pm when it's midnight in Lagos, set
 # this to +2. Get this right or time-based strategies will use the
 # wrong window.
-BROKER_TO_LAGOS_OFFSET_HOURS = 0
+BROKER_TO_LAGOS_OFFSET_HOURS = 8
 
 # ------------------------------------------------------------------
 # LOGGING
