@@ -15,7 +15,7 @@ import MetaTrader5 as mt5
 
 # Must match the EXACT symbol name shown in your MT5 Market Watch.
 # Some brokers use suffixes/prefixes, e.g. "XAUUSD.", "GOLD", "XAUUSDm".
-SYMBOL = "XAUUSD"
+SYMBOL = "XAUUSDm"
 
 # Candle timeframe used to build the data your strategy analyzes.
 # Common options: mt5.TIMEFRAME_M5, M15, M30, H1, H4, D1
